@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../resources/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="tarefas">
+
+        <p:fieldset legend="Consultar Pessoas">
+            <h:form>
+                <p:growl id="msg0"/>
+                <p:dataTable id="idTabela" var="pessoa" value="#{mbPessoa.pessoas}"
+                             paginator="true" rows="10" emptyMessage="Nenhum registro encontrado"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15" >
+
+                    <f:facet name="header">Lista de Pessoas</f:facet>
+                    <p:column headerText="Visualizar" >
+                        <p:commandButton onclick="visitanteDialog.show();" update=":frmVisitante" icon="ui-icon-search" > 
+                            <f:setPropertyActionListener value="#{pessoa}" target="#{mbPessoa.pessoa}"/>
+                            <f:setPropertyActionListener value="#{pessoa.idPessoa}" target="#{mbPessoa.pessoa.idPessoa}"/>
+                        </p:commandButton>
+                    </p:column>
+
+                    <p:column filterBy="#{pessoa.nome}" >
+                        <f:facet name="header">
+                            <h:outputText value="Nome"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.nome}"/>
+                    </p:column>
+                    <p:column >
+                        <f:facet name="header">
+                            <h:outputText value="Acesso"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.acesso.nome}"/>
+                    </p:column>
+                    <p:column filterBy="#{pessoa.rg}">
+                        <f:facet name="header">
+                            <h:outputText value="RG"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.rg}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Telefone"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.telefone}"/>
+                    </p:column>
+                    <p:column filterBy="#{pessoa.empresa}">
+                        <f:facet name="header">
+                            <h:outputText value="Empresa"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.empresa}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Cargo"/>
+                        </f:facet>
+                        <h:outputText value="#{pessoa.cargo}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ações"/>
+                        </f:facet>
+                        <p:commandButton action="#{mbPessoa.editPessoa}"
+                                         value="Editar" image="ui-icon ui-icon-pencil"
+                                         update="@form" ajax="false">
+                            <f:setPropertyActionListener value="#{pessoa}" target="#{mbPessoa.pessoa}"/>
+                            <f:setPropertyActionListener value="#{pessoa.idPessoa}" target="#{mbPessoa.pessoa.idPessoa}"/>
+                        </p:commandButton>
+
+                    </p:column>
+                </p:dataTable>
+
+
+            </h:form>
+        </p:fieldset>
+        <p:dialog header="Visitante... "  widgetVar="visitanteDialog" modal="true" style="text-align: center"
+                  visible="false" resizable="false">
+            <h:form id="frmVisitante">
+
+                <br/>
+                <br/>
+                <p:panelGrid columns="2">
+                    <h:graphicImage value="/#{mbPessoa.pessoa.foto}" height="250" width="250"/> 
+
+                    <p:panelGrid columns="2">
+
+                        Nome:    
+                        <h:outputLabel id="nome"  value="#{mbPessoa.pessoa.nome}" />
+
+                        RG:      
+                        <h:outputLabel id="rg"  value="#{mbPessoa.pessoa.rg}" />
+
+                        Empresa:      
+                        <h:outputLabel id="empresa"  value="#{mbPessoa.pessoa.empresa}" />
+
+                        Cargo:
+                        <h:outputLabel id="cargo"  value="#{mbPessoa.pessoa.cargo}" />
+
+                        Celular:
+                        <h:outputLabel id="celular"  value="#{mbPessoa.pessoa.telefone}" />
+
+                        Acesso:
+                        <h:outputLabel id="acesso"  value="#{mbPessoa.pessoa.acesso.nome}" />
+
+                        Observação: 
+                        <p:inputTextarea id="observacao"  value="#{mbPessoa.pessoa.observacao}" />
+                        <br/>
+                        <p:commandButton value="Atualizar" action="#{mbPessoa.atualizaPessoa()}" ajax="false"/>
+                    </p:panelGrid>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

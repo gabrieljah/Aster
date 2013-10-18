@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../resources/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="tarefas">
+        <p:fieldset legend="Editar Pessoas">
+            <br/>
+            <h:form>
+                <p:wizard nextLabel="Próximo" backLabel="Anterior">
+                    <p:tab title="Foto" id="infoFoto">
+                        <p:panel header="Capturar Foto do Visitante">
+                            <p:growl id="msg0"/>
+                            <h:panelGrid columns="2" cellpadding="10"  id="grid0">
+
+                                <p:graphicImage  id="fotoLink" 
+                                                 value="#{pageContext.contextPath}/#{mbPessoa.pessoa.foto}"
+                                                 cache="false" />
+                                <p:photoCam widgetVar="pc"  listener="#{mbPessoa.oncapture}"
+                                            update="fotoLink" />
+                                <p:commandButton  value="Capturar!" type="button" oncomplete="fotolink.show" onclick="pc.capture()"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </p:tab>
+                    <p:tab title="Informações Básicas" id="infoPessoal">
+                        <p:panel header="Informações Básicas da Pessoa">
+                            <p:growl id="msg1"/>
+                            <h:panelGrid columns="2" cellpadding="10" styleClass="panelGrid" id="grid1">
+
+                                <h:outputLabel/>
+                                <h:inputHidden id="idpessoa" value="#{mbPessoa.pessoa.idPessoa}"/> 
+
+                                <h:outputLabel for="nomePessoa" value="Nome.:"/>
+                                <p:inputText id="nomePessoa" size="40" value="#{mbPessoa.pessoa.nome}"
+                                             required="true" requiredMessage="O campo [Nome] é obrigatório"
+                                             onkeyup="this.value = this.value.toUpperCase()"/>
+
+                                <h:outputLabel for="sexo" value="Sexo.:"/>
+                                <p:selectOneMenu id="sexo" value="#{mbPessoa.pessoa.sexo.idSexo}">
+                                    <f:selectItems value="#{bbSexo.sexos}" var="sexo" itemValue="#{sexo.idSexo}" itemLabel="#{sexo.nome}"/>
+                                </p:selectOneMenu>
+
+
+                                <h:outputLabel for="telefone" value="Telefone.:"/>
+                                <p:inputMask id="telefone" size="40" mask="(99) 9999-9999"
+                                             value="#{mbPessoa.pessoa.telefone}" />
+                                
+                                <h:outputLabel for="rg" value="RG.:"/>
+                                <p:inputText id="rg" size="40" maxlength="9" value="#{mbPessoa.pessoa.rg}"
+                                             required="true" requiredMessage="O campo [RG] é obrigatório">
+
+                                </p:inputText>
+
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab title="Informações do Adicionais" id="infoAdicional">
+                        <p:panel header="Informações do Adicionais da Pessoa">
+                            <p:growl id="msg2"/>
+                            <h:panelGrid columns="2" cellpadding="10" styleClass="panelGrid" id="grid2">
+
+
+                                <h:outputLabel for="acesso" value="Acesso.:"/>
+                                <p:selectOneMenu id="acesso" value="#{mbPessoa.pessoa.acesso.idAcesso}">
+                                    <f:selectItems value="#{bbAcesso.acessos}" var="acesso" itemValue="#{acesso.idAcesso}" itemLabel="#{acesso.nome}"/>
+                                </p:selectOneMenu>
+
+
+                                <h:outputLabel for="empresa" value="Empresa.:"/>
+                                <p:inputText id="empresa" size="60" value="#{mbPessoa.pessoa.empresa}" required="true" 
+                                             requiredMessage="É obrigatório o preenchimento do campo [Empresa]"
+                                             onkeyup="this.value = this.value.toUpperCase()"/>
+
+                                <h:outputLabel for="cargo" value="Cargo.:"/>
+                                <p:inputText id="cargo" size="20" value="#{mbPessoa.pessoa.cargo}" 
+                                             onkeyup="this.value = this.value.toUpperCase()"/>
+
+                                <h:outputLabel for="observacao" value="Observação.:"/>
+                                <p:inputTextarea id="observacao"  value="#{mbPessoa.pessoa.observacao}" />	
+
+
+                                <br/>
+                                <p:panel>
+                                    <p:commandButton value="Atuazliar"  onclick="visitanteDialog.show();"
+                                                     action="#{mbPessoa.atualizaPessoa()}"
+                                                     image="ui-icon ui-icon-disk" />
+                                    <p:commandButton value="Cancelar" actionListener="#{mbPessoa.limpPessoa}" 
+                                                     image="ui-icon ui-icon-close" update="@form"/>
+                                </p:panel>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </h:form>
+
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>

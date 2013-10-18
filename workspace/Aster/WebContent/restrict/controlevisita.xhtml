@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../resources/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="tarefas">
+        <p:fieldset legend="Controle de Visitantes">
+            <br/>
+            <h:form>
+                <p:panel header="Consultar Visitante">
+                    <p:growl id="msg0"/>
+                    <h:panelGrid columns="6" cellpadding="10" styleClass="panelGrid" id="grid0">
+
+                        <h:outputLabel for="rg" value="RG.:"/>
+                        <p:inputText id="rg" size="25" maxlength="9" value="#{mbMovimento.rg}"
+                                     required="true" requiredMessage="O campo [RG] é obrigatório">
+                        </p:inputText>
+                        <p:spacer height="25"/>
+                        <p:commandButton value="Pesquisar" action="#{mbMovimento.consultarRG()}" update="tabela" icon="ui-icon-search"/>
+                        <p:spacer height="40"/>
+
+                        <p:dataList id="tabela" var="pessoa" rows="1" value="#{mbMovimento.pessoas}" >
+                            <p:column headerText="Visitante">
+
+                                <p:commandLink value="#{pessoa.nome}"  onclick="visitanteDialog.show();" update=":frmVisitante">
+                                    <f:setPropertyActionListener value="#{pessoa}" target="#{mbMovimento.pessoa}" />  
+                                </p:commandLink>
+
+                            </p:column>
+                        </p:dataList>
+
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            <h:form>
+
+                <p:panel header="Registro de Entrada">
+                    <p:growl id="msg1"/>
+                    <h:panelGrid columns="4" cellpadding="10" styleClass="panelGrid" id="grid1">
+
+
+                        <p:dataTable id="idTabela" var="movimento" value="#{mbMovimento.movimentoEntrada}"
+                                     paginator="true" rows="15" emptyMessage="Nenhum registro encontrado"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                                     {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,30,50" >
+                            <f:facet name="header">Visitantes na Empresa</f:facet>
+
+                            <p:column headerText="Cracha" filterBy="#{movimento.cracha}">
+                                <p:commandButton value="Registrar"  onclick="visitanteDialogSaida.show();" update=":frmVisitanteSaida">
+                                    <f:setPropertyActionListener value="#{movimento}" target="#{mbMovimento.movimento}" />  
+                                </p:commandButton>
+
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Nome"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Acesso"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.acesso.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="RG"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.rg}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Empresa"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.empresa}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Cargo"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.cargo}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Visitado"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.visitado.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Entrada"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.formataHoraEntrada}|#{movimento.formataDataEntrada}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <p:panel header="Registro de Visitantes">
+                    <p:growl id="msg2"/>
+                    <h:panelGrid columns="4" cellpadding="10" styleClass="panelGrid" id="grid2">
+
+
+                        <p:dataTable id="idTabela1" var="movimento" value="#{mbMovimento.movimentoSaida}"
+                                     paginator="true" rows="10" emptyMessage="Nenhum registro encontrado"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                                     {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15,30,50" >
+                            <f:facet name="header">Registro de Saida</f:facet>
+
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Nome"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Acesso"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.acesso.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="RG"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.rg}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Empresa"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.empresa}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Cargo"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.pessoa.cargo}"/>
+                            </p:column>
+
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Visitado"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.visitado.nome}"/>
+                            </p:column>
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Entrada"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.formataHoraEntrada}|#{movimento.formataDataEntrada}"/>
+                            </p:column>
+
+                            <p:column  >
+                                <f:facet name="header">
+                                    <h:outputText value="Saida"/>
+                                </f:facet>
+                                <h:outputText value="#{movimento.formataHoraSaida}|#{movimento.formataDataSaida}"/>
+                            </p:column>
+
+
+
+                        </p:dataTable>
+
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:form>
+
+            <p:dialog header="Visitante... "   widgetVar="visitanteDialogSaida" modal="true" style="text-align: center"
+                      visible="false" resizable="false">
+                <h:form id="frmVisitanteSaida">
+                    <div align="center">
+                        <p:panelGrid columns="2">
+                            <h2>Acesso:</h2>
+                            <h:outputLabel  value="#{mbMovimento.movimento.pessoa.acesso.nome}" style="font-size: 20px; font-weight: bold;color: #{mbMovimento.movimento.pessoa.acesso eq '1' ? '#008B00' : '#FF0000'}"/>
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:panelGrid columns="2">
+                        <h:graphicImage value="/#{mbMovimento.movimento.pessoa.foto}" height="250" width="250"/> 
+                        <p:panelGrid columns="2">
+                            Cracha:
+                            <h:outputLabel id="visitado"  value="#{mbMovimento.movimento.cracha}" />
+                            Visitado:
+                            <h:outputLabel id="cracha"  value="#{mbMovimento.movimento.visitado.nome}" />
+                            Nome:
+                            <h:outputLabel id="nome"  value="#{mbMovimento.movimento.pessoa.nome}" />
+                            RG:      
+                            <h:outputLabel id="rg"  value="#{mbMovimento.movimento.pessoa.rg}" />
+
+                            Empresa:      
+                            <h:outputLabel id="empresa"  value="#{mbMovimento.movimento.pessoa.empresa}" />
+
+                            Cargo:
+                            <h:outputLabel id="cargo"  value="#{mbMovimento.movimento.pessoa.cargo}" />
+
+                            Celular:
+                            <h:outputLabel id="celular"  value="#{mbMovimento.movimento.pessoa.telefone}" />
+
+                            Observação: 
+                            <p:inputTextarea id="observacao"  value="#{mbMovimento.movimento.pessoa.observacao}" />
+                            <br/>
+                            <p:commandButton value="Registrar Saida" action="#{mbMovimento.saidaMovimento()}" ajax="false"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+
+
+            <p:dialog header="Visitante... "   widgetVar="visitanteDialog" modal="true" style="text-align: center"
+                      visible="false" resizable="false">
+                <h:form id="frmVisitante">
+                    <div align="center">
+                        <p:panelGrid columns="2">
+                            <h2>Acesso:</h2>
+                            <h:outputLabel  value="#{mbMovimento.pessoa.acesso.nome}" style="font-size: 20px; font-weight: bold;color: #{mbMovimento.pessoa.acesso eq 'SIM' ? '#008B00' : '#FF0000'}"/>
+                        </p:panelGrid>
+                    </div>
+                    <br/>
+                    <p:panelGrid columns="2">
+                        <h:graphicImage value="/#{mbMovimento.pessoa.foto}" height="250" width="250"/> 
+                        <p:panelGrid columns="2">
+
+                            Cracha: 
+                            <p:inputMask id="cracha"  value="#{mbMovimento.movimento.cracha}" mask="9999" size="5" required="true" requiredMessage="O Cracha é obrigatório"/>
+                            Visitado: 
+                            <h:selectOneMenu id="visitado" value="#{mbMovimento.movimento.visitado.idVisitado}">
+                                <f:selectItems value="#{bbVisitado.visitados}" var="visitado" itemValue="#{visitado.idVisitado}" itemLabel="#{visitado.nome}"/>
+                            </h:selectOneMenu>
+
+                            Nome:
+                            <h:outputLabel id="nome"  value="#{mbMovimento.pessoa.nome}" />
+
+                            RG:      
+                            <h:outputLabel id="rg"  value="#{mbMovimento.pessoa.rg}" />
+
+                            Empresa:      
+                            <h:outputLabel id="empresa"  value="#{mbMovimento.pessoa.empresa}" />
+
+                            Cargo:
+                            <h:outputLabel id="cargo"  value="#{mbMovimento.pessoa.cargo}" />
+
+                            Celular:
+                            <h:outputLabel id="celular"  value="#{mbMovimento.pessoa.telefone}" />
+
+                            Observação: 
+                            <p:inputTextarea id="observacao1"  value="#{mbMovimento.pessoa.observacao}" />
+                            <br/>
+                            <p:commandButton value="Registrar Entrada" action="#{mbMovimento.entradaMovimento(mbMovimento.pessoa)}" ajax="false"/>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>

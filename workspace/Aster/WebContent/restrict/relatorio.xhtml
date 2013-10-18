@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../resources/main.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="tarefas">
+        <p:fieldset legend="Relátorio de Visitantes">
+            <br/>
+            <h:form>
+                <p:panel header="Parametros da Consulta">
+                    <p:growl id="msg0"/>
+                    <h:panelGrid columns="6" cellpadding="10" styleClass="panelGrid" id="grid0">
+                        <h:outputLabel for="de" value="De.:"/>
+                        <p:calendar id="de" yearRange="c-90"   
+                                    locale="pt_BR" navigator="true" value="#{mbRelatorio.of}" effect="explode" pattern="dd/MM/yyyy"/>
+                        <h:outputLabel for="ate" value="Até.:"/>
+
+                        <p:calendar id="ate" yearRange="c-90"    value="#{mbRelatorio.to}"
+                                    locale="pt_BR" navigator="true" effect="explode" pattern="dd/MM/yyyy"/>
+                        <p:spacer width="20" height="10" />
+                        <p:commandButton value="Vizualizar" action="#{mbRelatorio.imprimeRelatorio}" ajax="false" />
+                    </h:panelGrid>
+
+                    <h:outputLabel value="Clique no Botão abaixo para filtrar" style="font-size: 12px; font-style: italic;"/>
+                    <br/>
+                    <br/>
+                    <p:panel header="Filtrando Informações..."  toggleable="true" toggleOrientation="horizontal" collapsed="true">
+                        <h:panelGrid columns="3" cellpadding="10" styleClass="panelGrid" id="grid1">
+
+
+
+                            <h:outputLabel for="visitante" value="Visitante.:"/>
+                            <p:inputText id="visitante" size="45" value="#{mbRelatorio.visitante}" maxlength="9"
+                                         onkeyup="this.value = this.value.toUpperCase()"/>
+                            <p:watermark for="visitante" value="Digite o RG do Visitante que deseja Filtrar..." /> 
+
+
+                            <h:outputLabel for="empresa" value="Empresa.:"/>
+                            <p:inputText id="empresa" size="45"  value="#{mbRelatorio.empresa}" 
+                                         onkeyup="this.value = this.value.toUpperCase()"/>
+                            <p:watermark for="empresa" value="Digite o NOME da Empresa que deseja Filtrar..." /> 
+
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="10" styleClass="panelGrid" id="grid2">
+                            <h:outputLabel for="acesso" value="Acesso.:"/>
+                            <h:selectOneMenu id="acesso" value="#{mbRelatorio.acesso}" >
+                                <f:selectItem   itemLabel="Selecione..."/>
+
+                                <f:selectItems value="#{bbAcesso.acessos}" var="acesso" 
+                                               itemValue="#{acesso.idAcesso}" 
+                                               itemLabel="#{acesso.nome}"/>
+                            </h:selectOneMenu>
+                            <h:outputLabel for="visitado" value="Visitado.:"/>
+                          
+                            <h:selectOneMenu id="visitado" value="#{mbRelatorio.visitado}" >
+                                <f:selectItem   itemLabel="Selecione..."/>
+
+                                <f:selectItems value="#{bbVisitado.visitados}" var="visitado" 
+                                               itemValue="#{visitado.idVisitado}" 
+                                               itemLabel="#{visitado.nome}"/>
+                            </h:selectOneMenu>
+
+                        </h:panelGrid>
+
+                    </p:panel>
+                </p:panel>
+
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+
+</ui:composition>
